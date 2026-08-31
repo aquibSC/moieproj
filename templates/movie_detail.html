@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% from "_movie_card.html" import movie_card %}
+
+{% block title %}{{ movie.title }} — Nightreel{% endblock %}
+
+{% block content %}
+<section class="detail-hero">
+  <div class="poster-placeholder large" style="--hue: {{ (movie.id * 47) % 360 }}">
+    <span class="poster-title">{{ movie.title }}</span>
+  </div>
+
+  <div class="detail-info">
+    <h1>{{ movie.title }} <span class="movie-year">({{ movie.year }})</span></h1>
+    <p class="movie-genres">{{ movie.genres }} &middot; {{ movie.runtime }} min &middot; ★ {{ movie.rating }}</p>
+    <p class="detail-overview">{{ movie.overview }}</p>
+    <p class="detail-meta"><strong>Director:</strong> {{ movie.director }}</p>
+    <p class="detail-meta"><strong>Cast:</strong> {{ movie.cast }}</p>
+
+    {% if current_user.is_authenticated %}
+      <div class="detail-actions">
+        <form class="watchlist-toggle-form" data-movie-id="{{ movie.id }}" action="{{ url_for('toggle_watchlist', movie_id=movie.id) }}" method="post">
+          <button type="submit" class="watchlist-btn {% if movie.id in watchlist_ids %}active{% endif %}">
+            {% if movie.id in watchlist_ids %}✓ In Watchlist{% else %}+ Add to Watchlist{% endif %}
+          </button>
+        </form>
+
+        <form class="rating-form" data-movie-id="{{ movie.id }}" action="{{ url_for('rate_movie', movie_id=movie.id) }}" method="post">
+          <span class="rating-label">Your rating:</span>
+          <div class="star-row">
+            {% for i in [5, 4, 3, 2, 1] %}
+              <button type="submit" name="stars" value="{{ i }}" class="star-btn {% if i <= user_rating %}filled{% endif %}">★</button>
+            {% endfor %}
+          </div>
+        </form>
+      </div>
+    {% else %}
+      <p class="muted"><a href="{{ url_for('login') }}">Log in</a> to save this to your watchlist or rate it.</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="movie-section">
+  <h2>More like this</h2>
+  <div class="movie-grid">
+    {% for m in similar %}
+      {{ movie_card(m, watchlist_ids) }}
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

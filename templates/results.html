@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% from "_movie_card.html" import movie_card %}
+
+{% block title %}Results — Nightreel{% endblock %}
+
+{% block content %}
+<section class="results-header">
+  {% if mood_text %}
+    <h1>Movies for: <em>"{{ mood_text }}"</em></h1>
+  {% elif search_query is defined %}
+    <h1>Search results for "{{ search_query }}"</h1>
+  {% else %}
+    <h1>Results</h1>
+  {% endif %}
+</section>
+
+{% if movies %}
+  <div class="movie-grid">
+    {% for movie in movies %}
+      {{ movie_card(movie, watchlist_ids) }}
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="empty-state">
+    No matches yet. Try describing the vibe differently — mention a genre, a feeling, or a theme
+    (e.g. "heartbreak and rain", "space adventure with big stakes", "dark comedy about family").
+  </p>
+{% endif %}
+{% endblock %}

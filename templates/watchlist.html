@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_movie_card.html" import movie_card %}
+
+{% block title %}Your Watchlist — Nightreel{% endblock %}
+
+{% block content %}
+<section class="results-header">
+  <h1>Your Watchlist</h1>
+</section>
+
+{% if movies %}
+  <div class="movie-grid">
+    {% for movie in movies %}
+      {{ movie_card(movie, watchlist_ids) }}
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="empty-state">Nothing saved yet. Browse the homepage or search a mood, then hit "+ Watchlist" on anything that catches your eye.</p>
+{% endif %}
+{% endblock %}

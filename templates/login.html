@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Log in — Nightreel{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+  <h1>Log in</h1>
+  <form method="post" class="auth-form">
+    <label>Username
+      <input type="text" name="username" required autofocus>
+    </label>
+    <label>Password
+      <input type="password" name="password" required>
+    </label>
+    <button type="submit">Log in</button>
+  </form>
+  <p class="auth-switch">No account yet? <a href="{{ url_for('register') }}">Sign up</a></p>
+</section>
+{% endblock %}

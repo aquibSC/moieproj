@@ -1,0 +1,23 @@
+{% macro movie_card(movie, watchlist_ids) %}
+<article class="movie-card">
+  <a href="{{ url_for('movie_detail', movie_id=movie.id) }}" class="movie-card-link">
+    <div class="poster-placeholder" style="--hue: {{ (movie.id * 47) % 360 }}">
+      <span class="poster-title">{{ movie.title }}</span>
+    </div>
+    <div class="movie-card-body">
+      <h3>{{ movie.title }} <span class="movie-year">{{ movie.year }}</span></h3>
+      <p class="movie-genres">{{ movie.genres }}</p>
+      {% if movie.match_score is defined %}
+        <p class="match-score">{{ movie.match_score }}% match</p>
+      {% endif %}
+    </div>
+  </a>
+    {% if current_user is defined and current_user.is_authenticated %}
+    <form class="watchlist-toggle-form" data-movie-id="{{ movie.id }}" action="{{ url_for('toggle_watchlist', movie_id=movie.id) }}" method="post">
+      <button type="submit" class="watchlist-btn {% if movie.id in watchlist_ids %}active{% endif %}">
+        {% if movie.id in watchlist_ids %}✓ In Watchlist{% else %}+ Watchlist{% endif %}
+      </button>
+    </form>
+  {% endif %}
+</article>
+{% endmacro %}
